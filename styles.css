@@ -1,0 +1,17 @@
+html, body{
+    padding: 0; 
+    margin: 0;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+background-color: black ;
+
+}
+
+#myCanvas{
+    background-image: url(./assets/da4x6p-f91e32ca-8ca6-43d6-a25e-e3358133dbad.png);
+    background-color: black;
+    background-size: cover;
+
+  }
+

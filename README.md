@@ -7,16 +7,16 @@ TASK LIST
     .[✓]CSS
     .[✓]HTML
     .[✓]CREATE ASSETS FOLDER
-.[]Create a screen that takes up entire window
-.[]Make ship show up on sceen
+.[✓]Create a screen that takes up entire window
+.[✓]Make ship show up on sceen
 .[]Make ship move 
-    .[]forwrads
-    .[]left
-    .[]right
-    .[]back
-    .[]Align movement to 'a''w''d''s' key press
+    .[✓]forwrads
+    .[✓]left
+    .[✓]right
+    .[✓]back
+    .[✓]Align movement to 'a''w''d''s' key press
 .[]Make an enemy
-    .[]make 3 enemys 
+    .[✓]make 3 enemys 
     .[]make the enemies attract to eachother like a hoard
     .[]ensure enemies dont overlap
     .[]make the enemies attarct to ship
