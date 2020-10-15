@@ -2,7 +2,9 @@
 //W = WIDTH && H = HEIGHT && POS = POSITION
 
 var canvas = document.getElementById('myCanvas');
-var ctx = canvas.getContext('2d')
+var ctx = canvas.getContext('2d');
+var enemies = [];
+var host;
 
 var osi = {
     posW : canvas.width/2,
@@ -29,24 +31,60 @@ function drawOsiris(){
     ctx.fill();
     ctx.closePath()  
 }
+function drawEnemy(obj){
+    ctx.beginPath();
+    ctx.arc(obj.x,obj.y,enemy.height,0,Math.PI*2);
+    ctx.fillStyle = "#FF0000";
+    ctx.fill();
+    ctx.closePath() 
+}
+function updateEnemies(){
+    for(let i = 0; i < enemies.length; i++){
+        let currentEnemy = enemies[i];
+        console.log(currentEnemy);
+        drawEnemy(currentEnemy);
+        if(currentEnemy.host && currentEnemy.x > canvas.width/2){
+            host.x --
+        }else   if(currentEnemy.host && currentEnemy.x < canvas.width/2){
+            host.x ++
+        }
+        if(!currentEnemy.host){
+            //move current enemy to hosT
+           if(host.x > currentEnemy.x){
+            currentEnemy.x ++
+            }
+            //get host location
+         
+        
+            //get location of curent enemy
+            //reduce distance between the two( ONLY CHANGING ENEMY LOCATION NOT HOST)
+        }
+    }
+}
 
-
-function drawEnemies(){ 
+(function (){ 
     let locationX = 20 
     let locationY = 20 
+    
     for(let i = 0; i < 100; i++){
         if(locationX > canvas.width -60){
             locationX = 20
             locationY += 20
         } 
         locationX += 20;
-        ctx.beginPath();
-        ctx.arc(locationX,locationY,enemy.height,0,Math.PI*2);
-        ctx.fillStyle = "#FF0000";
-        ctx.fill();
-        ctx.closePath()  
+        let currentEnemy = {};
+        currentEnemy.x = locationX;
+        currentEnemy.y = locationY;
+        currentEnemy.alive = true;
+        currentEnemy.host = false;
+        if(i==50){
+            currentEnemy.host = true;
+            host = currentEnemy;
+        }
+        drawEnemy(currentEnemy);
+        enemies.push(currentEnemy)
     }
-}
+}())
 
 window.onkeydown = (event) => { 
     console.log(event.key)
@@ -96,8 +134,8 @@ function osiMove(){
 function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     osiMove();
+    updateEnemies();
     drawOsiris();
-    drawEnemies();
 }
 setInterval(draw, 1)
 
