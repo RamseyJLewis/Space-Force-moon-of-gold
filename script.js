@@ -43,24 +43,42 @@ function updateEnemies(){
         let currentEnemy = enemies[i];
         console.log(currentEnemy);
         drawEnemy(currentEnemy);
-        if(currentEnemy.host && currentEnemy.x > canvas.width/2){
+        if(currentEnemy.host && currentEnemy.x > osi.posW){
             host.x --
-        }else   if(currentEnemy.host && currentEnemy.x < canvas.width/2){
+        }else   if(currentEnemy.host && currentEnemy.x < osi.posW){
             host.x ++
         }
+        if(currentEnemy.host && currentEnemy.y> osi.posH){
+            host.y--
+        }else   if(currentEnemy.host && currentEnemy.y< osi.posH){
+            host.y++
+        }
         if(!currentEnemy.host){
-            //move current enemy to hosT
-           if(host.x > currentEnemy.x){
-            currentEnemy.x ++
+          
+            if(host.x > currentEnemy.x){
+                currentEnemy.x ++   
+            }else if (host.x <currentEnemy.x){
+                currentEnemy.x --   
+            }  if(host.y > currentEnemy.y){
+                currentEnemy.y ++   
+            }else if (host.y < currentEnemy.y){
+                currentEnemy.y --   
+                //attempt to create orbit
+            // }   if(host.x == currentEnemy.x){
+            //     currentEnemy.x --   
+            // }else if (host.x == currentEnemy.x){
+            //     currentEnemy.x ++
+            // }  if(host.y == currentEnemy.y){
+            //     currentEnemy.y --  
+            // }else if (host.y ==  currentEnemy.y){
+            //     currentEnemy.y ++   
             }
-            //get host location
-         
-        
             //get location of curent enemy
             //reduce distance between the two( ONLY CHANGING ENEMY LOCATION NOT HOST)
         }
     }
 }
+
 
 (function (){ 
     let locationX = 20 
@@ -77,7 +95,7 @@ function updateEnemies(){
         currentEnemy.y = locationY;
         currentEnemy.alive = true;
         currentEnemy.host = false;
-        if(i==50){
+        if(i==25){
             currentEnemy.host = true;
             host = currentEnemy;
         }
