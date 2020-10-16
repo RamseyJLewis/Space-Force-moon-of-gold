@@ -7,26 +7,29 @@ var enemies = [];
 var host;
 
 var osi = {
-    posW : canvas.width/2,
-    posH : canvas.height-40,
+    x : canvas.width/2,
+    y : canvas.height-40,
     up : false,
     left : false,
     right : false,
     down : false,
+    width : 100,
     height : 20,
+    
 }
 var  enemy = {
-    posW : canvas.width/2,
-    posH : 20,
+    x : canvas.width/2,
+    y : 20,
     up : false,
     left : false,
     right : false,
     down : false,
-    height : 5,
+    height : 3,
+    width : 2,
 }
 function drawOsiris(){ 
     ctx.beginPath();
-    ctx.arc(osi.posW,osi.posH,osi.height,0,Math.PI*2);
+    ctx.arc(osi.x,osi.y,osi.height,0,Math.PI*2);
     ctx.fillStyle = "#1EA0FF";
     ctx.fill();
     ctx.closePath()  
@@ -38,40 +41,46 @@ function drawEnemy(obj){
     ctx.fill();
     ctx.closePath() 
 }
-function updateEnemies(){
+function hostChaseOsi(){
     for(let i = 0; i < enemies.length; i++){
         let currentEnemy = enemies[i];
-        console.log(currentEnemy);
+    
         drawEnemy(currentEnemy);
-        if(currentEnemy.host && currentEnemy.x > osi.posW){
+        if(currentEnemy.host && currentEnemy.x > osi.x){
             host.x --
-        }else   if(currentEnemy.host && currentEnemy.x < osi.posW){
+        }else   if(currentEnemy.host && currentEnemy.x < osi.x){
             host.x ++
         }
-        if(currentEnemy.host && currentEnemy.y> osi.posH){
+        if(currentEnemy.host && currentEnemy.y> osi.y){
             host.y--
-        }else   if(currentEnemy.host && currentEnemy.y< osi.posH){
+        }else   if(currentEnemy.host && currentEnemy.y< osi.y){
             host.y++
         }
-        if(!currentEnemy.host){
-          
-            if(host.x > currentEnemy.x){
-                currentEnemy.x ++   
-            }else if (host.x <currentEnemy.x){
-                currentEnemy.x --   
-            }  if(host.y > currentEnemy.y){
-                currentEnemy.y ++   
-            }else if (host.y < currentEnemy.y){
-                currentEnemy.y --   
+    }
+}
+
+function swarm(){
+    for(let i = 0; i < enemies.length; i++){
+        let currentEnemy = enemies[i];
+        drawEnemy(currentEnemy);
+    if(!currentEnemy.host){
+        if(host.x > currentEnemy.x){
+            currentEnemy.x ++   
+        }else if (host.x <currentEnemy.x){
+            currentEnemy.x --   
+        }  if(host.y > currentEnemy.y){
+            currentEnemy.y ++   
+        }else if (host.y < currentEnemy.y){
+                    currentEnemy.y --   
                 //attempt to create orbit
-            // }   if(host.x == currentEnemy.x){
-            //     currentEnemy.x --   
-            // }else if (host.x == currentEnemy.x){
-            //     currentEnemy.x ++
-            // }  if(host.y == currentEnemy.y){
-            //     currentEnemy.y --  
-            // }else if (host.y ==  currentEnemy.y){
-            //     currentEnemy.y ++   
+            }   if(host.x == currentEnemy.x){
+                currentEnemy.x --   
+            }else if (host.x == currentEnemy.x){
+                currentEnemy.x ++
+            }  if(host.y == currentEnemy.y){
+                currentEnemy.y --  
+            }else if (host.y ==  currentEnemy.y){
+                currentEnemy.y ++   
             }
             //get location of curent enemy
             //reduce distance between the two( ONLY CHANGING ENEMY LOCATION NOT HOST)
@@ -79,7 +88,7 @@ function updateEnemies(){
     }
 }
 
-//
+
 (function (){ 
     let locationX = 20 
     let locationY = 20 
@@ -105,57 +114,61 @@ function updateEnemies(){
         enemies.push(currentEnemy)
     }
 }())
-
+function osiMove(){
+    //up out 800
+    if(osi.up && osi.y >= 20 ){
+        osi.y -= 1  
+    }
+    //left out '0'
+    if(osi.left && osi.x >= 20){
+        osi.x -= 1
+        
+    }
+    //right out 1000
+    if(osi.right && osi.x <= 980){
+        osi.x += 1      
+    }
+    // down out zero
+    if(osi.down && osi.y <= 780){
+        osi.y += 1
+    }
+}
 window.onkeydown = (event) => { 
-    console.log(event.key)
-    if(event.key == 'w' ||event.key == 'W'){ 
+    if(event.key == 'w' ){ 
         osi.up = true
     }
-    if(event.key == 'a' ||event.key == 'A'){
+    if(event.key == 'a' ){
         osi.left = true
     }
-    if(event.key == 'd' ||event.key == 'D'){
+    if(event.key == 'd' ){
         osi.right = true
     }
-    if(event.key == 's' ||event.key == 'S'){
+    if(event.key == 's' ){
         osi.down = true
     }
 }
 
 window.onkeyup = (event) => { 
-    console.log(event.key)
-    if(event.key == 'w' ||event.key == 'W'){ 
+    if(event.key == 'w'){ 
         osi.up = false
     }
-    if(event.key == 'a' ||event.key == 'A'){
+    if(event.key == 'a'){
         osi.left = false
     }
-    if(event.key == 'd' ||event.key == 'D'){
+    if(event.key == 'd' ){
         osi.right = false
     }
-    if(event.key == 's' ||event.key == 'S'){
+    if(event.key == 's'){
         osi.down = false
     }
 }
-function osiMove(){
-    if(osi.up){
-        osi.posH -= 1  
-    }
-    if(osi.left){
-        osi.posW -= 1
-    }
-    if(osi.right){
-        osi.posW += 1
-    }
-    if(osi.down){
-        osi.posH += 1
-    }
-} 
+
 function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     osiMove();
-    updateEnemies();
+    hostChaseOsi();
     drawOsiris();
+    swarm()
 }
 setInterval(draw, 1)
 
