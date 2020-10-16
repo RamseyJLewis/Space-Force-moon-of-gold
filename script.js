@@ -79,12 +79,13 @@ function updateEnemies(){
     }
 }
 
-
+//
 (function (){ 
     let locationX = 20 
     let locationY = 20 
     
     for(let i = 0; i < 100; i++){
+        //Amount of enemeis
         if(locationX > canvas.width -60){
             locationX = 20
             locationY += 20
@@ -96,6 +97,7 @@ function updateEnemies(){
         currentEnemy.alive = true;
         currentEnemy.host = false;
         if(i==25){
+        // dictates Host
             currentEnemy.host = true;
             host = currentEnemy;
         }
