@@ -91,7 +91,7 @@ function swarm(){
         }
     }
 }
-//if location of enemie 
+//if location of enemi 
 
 (function (){ 
     let locationX = 240
