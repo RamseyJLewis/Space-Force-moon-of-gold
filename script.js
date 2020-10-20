@@ -2,13 +2,18 @@
 //W = WIDTH && H = HEIGHT && POS = POSITION
 
 var canvas = document.getElementById('myCanvas');
+var healthBar = document.getElementById('healthBlue')
 var ctx = canvas.getContext('2d');
 
 var enemies = [];
+var numOfEnemies = 100; 
 var host;
-var swarmSpeed = 4.5;
+var swarmSpeed = 2;
 var swarmSize = 2;
-var hostSpeed = .45;
+var hostSpeed = .3;
+var highestDeath = 0;
+var pause = false;
+//grab vale after all deaths
 
 
 var osi = {
@@ -20,6 +25,7 @@ var osi = {
     down : false,
     diameter : 20,
     health: 8000,
+    move: 1,
     
 }
 var  enemy = {
@@ -30,7 +36,6 @@ var  enemy = {
     right : false,
     down : false,
     diameter : 2.5,
-    alive: true,
 }
 function drawOsiris(){ 
     ctx.beginPath();
@@ -43,6 +48,9 @@ function drawEnemy(obj){
     ctx.beginPath();
     ctx.arc(obj.x,obj.y,enemy.diameter,0,Math.PI*2);
     ctx.fillStyle = "#FF0000";
+    if (obj.host){
+        ctx.fillStyle ="#00FF00"
+    }
     ctx.fill();
     ctx.closePath() 
 }
@@ -71,34 +79,56 @@ function swarm(){
         drawEnemy(currentEnemy);
         if(!currentEnemy.host){
             if(host.x > currentEnemy.x && currentEnemy.dx < swarmSize){
-                currentEnemy.dx += Math.floor(Math.random() * swarmSpeed) / 100;  
+                currentEnemy.dx += (Math.random() * swarmSpeed/100);  
             }else if (host.x <currentEnemy.x && currentEnemy.dx > -swarmSize){
-                currentEnemy.dx -= Math.floor(Math.random() * swarmSpeed) / 100;
+                currentEnemy.dx -= (Math.random() * swarmSpeed/100);
             }  if(host.y > currentEnemy.y && currentEnemy.dy < swarmSize){
-                currentEnemy.dy += Math.floor(Math.random() * swarmSpeed) / 100; 
+                currentEnemy.dy += (Math.random() * swarmSpeed/100); 
             }else if (host.y < currentEnemy.y && currentEnemy.dy > -swarmSize){
-                currentEnemy.dy -= Math.floor(Math.random() * swarmSpeed) / 100;
+                currentEnemy.dy -= (Math.random() * swarmSpeed/100);
             }
             currentEnemy.x += currentEnemy.dx
             currentEnemy.y += currentEnemy.dy
         }
         if((currentEnemy.x + enemy.diameter/2  >= osi.x - osi.diameter/2 && currentEnemy.x - enemy.diameter/2 <= osi.x + osi.diameter/2 )
         && (currentEnemy.y + enemy.diameter/2 >= osi.y - osi.diameter/2 && currentEnemy.y - enemy.diameter/2 <= osi.y + osi.diameter/2)){
-        //    osi.health--
-        //     console.log(osi.health)
-            //delete enemy
-            //visualize health decrese 
+            osi.health--
+            healthBar.style.width = `${osi.health/10}px` 
+            
+            deleteEnemy(currentEnemy)
+            //invoke delete enemy 
+        
         }
     }
 }
-//if location of enemi 
+function deleteEnemy(currentEnemy){
+    enemies.splice(enemies.indexOf(currentEnemy),1)
+
+    if(currentEnemy.host){
+        currentEnemy.host = false
+        enemies[0].host = true
+        host = enemies[0]
+    }
+}
+
+function setHost(currentEnemy){
+    if(currentEnemy.host){
+        for(let i = 0; i < enemies.length; i++){
+            if (enemies[i]){
+                enemies[i].host = true
+                host = enemies[i]
+                return
+            }
+        }
+    }
+}
 
 (function (){ 
     let locationX = 240
     let locationY = 20 
     
-    for(let i = 0; i < 100; i++){
-        //Amount of enemeis
+    for(let i = 0; i < numOfEnemies; i++){
+        //Amount of enemies
         if(i% 10 === 0){
             locationX = (canvas.width /2) - 50
             locationY += 20
@@ -107,11 +137,12 @@ function swarm(){
         let currentEnemy = {};
         currentEnemy.x = locationX;
         currentEnemy.y = locationY;
-        currentEnemy.alive = true;
         currentEnemy.host = false;
         currentEnemy.dx = 0;
         currentEnemy.dy = 0;
-        if(i==25){
+        currentEnemy.id = i;
+        if(i== enemies/5){
+            
         // dictates Host
             currentEnemy.host = true;
             host = currentEnemy;
@@ -123,20 +154,20 @@ function swarm(){
 function osiMove(){
     //up out 800
     if(osi.up && osi.y >= 20 ){
-        osi.y -= 1  
+        osi.y -= osi.move
     }
     //left out '0'
     if(osi.left && osi.x >= 20){
-        osi.x -= 1
+        osi.x -= osi.move
         
     }
     //right out 1000
     if(osi.right && osi.x <= 980){
-        osi.x += 1      
+        osi.x += osi.move 
     }
     // down out zero
     if(osi.down && osi.y <= 780){
-        osi.y += 1
+        osi.y += osi.move
     }
 }
 window.onkeydown = (event) => { 
@@ -167,9 +198,15 @@ window.onkeyup = (event) => {
     if(event.key.toLowerCase() == 's'){
         osi.down = false
     }
+    if(event.key.toLowerCase() == 'p'){
+        pause = !pause 
+    }
 }
 
 function draw(){
+    if(pause){
+        return
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     osiMove();
     hostChaseOsi();
