@@ -14,3 +14,20 @@ background-color: black ;
     background-size: cover;
   }
 
+
+  #healthGreen{
+    position: absolute;
+    height: 10px;
+    width:800px;
+    background-color: #1EA0FF;
+  }
+  #healthRed{
+    position: absolute;
+    height: 10px;
+    width:800px;
+    background-color: red;
+  }
+
+
+
+  
