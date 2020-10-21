@@ -52,6 +52,7 @@ html, body{
     z-index: 1;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     color: green;
     text-decoration-color: black;

@@ -42,9 +42,8 @@ var  enemy = {
 }
 //draws scoreboard
 function updateHUD(){
-    HUD.innerText = score;
-    
-  
+    HUD.innerText = 'Score: ' + score + ' H.P: ' + osi.health;
+
 }
 //draws player ship
 function drawOsiris(){ 
@@ -112,9 +111,15 @@ function swarm(){
             score++
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
+            
         
         }
     }
+}
+
+function gameover(){
+    if( osi.health == 0)
+    alert('GAME OVER')
 }
 
 //
@@ -181,11 +186,11 @@ function osiMove(){
         
     }
     //right out 1000
-    if(osi.right && osi.x <= 980){
+    if(osi.right && osi.x <= 830){
         osi.x += osi.move 
     }
     // down out zero
-    if(osi.down && osi.y <= 780){
+    if(osi.down && osi.y <= 680){
         osi.y += osi.move
     }
 }
@@ -234,7 +239,8 @@ function draw(){
     drawOsiris();
     swarm()
     updateHUD()
-}
+    gameover();
+} 
 setInterval(draw, 1)
 
 

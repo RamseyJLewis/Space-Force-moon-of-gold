@@ -28,7 +28,7 @@ TASK LIST
     .[]give direction to projectiles
     .[]make projectiles destory enemies on contact 
     .[]make projectiles destory self on contact with enemies or screen boundreis
-.[]create HUD
+.[✓ ]create HUD
     .[]create time frame to end game
     .[]make time frame mesured by meters counting down
     .[]make spawning of enemies increase by distance decreasing 
