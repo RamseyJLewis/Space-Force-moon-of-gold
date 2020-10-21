@@ -1,33 +1,63 @@
 html, body{
     padding: 0; 
     margin: 0;
-    height: 100%;
+   
     justify-content: center;
     display: flex;
-background-color: black ;
+    background-color: black ;
 
 }
 
 #myCanvas{
-    background-image: url(./assets/da4x6p-f91e32ca-8ca6-43d6-a25e-e3358133dbad.png);
+    background-image: url(./assets/redPlanet.jpeg);
     background-color: black;
     background-size: cover;
+    position: absolute;
+    left: 200px;
+    top: 0;
+    border-radius: 25px;
+    z-index: -1;
   }
 
 
   #healthBlue{
     position: absolute;
+    left: 225px;
+    top: 10px;
     height: 10px;
     width:800px;
-    background-color: #1EA0FF;
+    background-color: #00c16e;
+    border-radius: 25px;
+    z-index: 3;
   }
   #healthRed{
     position: absolute;
+    left: 225px;
+    top: 10px;
     height: 10px;
     width:800px;
     background-color: red;
+    border-radius: 25px;
+    z-index: 2;
   }
+#scoreBoard {
+    width: 200px;
+    height: 60px;
+    background-color: rgba(4, 0, 0, 0.5);
+    border-radius: 25px;
+    position: absolute;
+    left: 200px;
+    top: 30px;
+    left: 300px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: green;
+    text-decoration-color: black;
+    text-decoration: black;
 
+}
 
 
   

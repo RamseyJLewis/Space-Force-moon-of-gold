@@ -3,16 +3,19 @@
 
 var canvas = document.getElementById('myCanvas');
 var healthBar = document.getElementById('healthBlue')
+var HUD = document.getElementById('scoreBoard')
 var ctx = canvas.getContext('2d');
 
 var enemies = [];
-var numOfEnemies = 100; 
+var numOfEnemies = 200; 
 var host;
 var swarmSpeed = 2;
 var swarmSize = 2;
 var hostSpeed = .3;
 var highestDeath = 0;
 var pause = false;
+var bulletList = [];
+var score = 0;
 //grab vale after all deaths
 
 
@@ -24,7 +27,7 @@ var osi = {
     right : false,
     down : false,
     diameter : 20,
-    health: 8000,
+    health: 800,
     move: 1,
     
 }
@@ -37,27 +40,37 @@ var  enemy = {
     down : false,
     diameter : 2.5,
 }
+//draws scoreboard
+function updateHUD(){
+    HUD.innerText = score;
+    
+  
+}
+//draws player ship
 function drawOsiris(){ 
     ctx.beginPath();
     ctx.arc(osi.x,osi.y,osi.diameter,0,Math.PI*2);
-    ctx.fillStyle = "#1EA0FF";
+    ctx.fillStyle = "#5bc0be";
     ctx.fill();
     ctx.closePath()  
 }
+//draws enemy & host 
 function drawEnemy(obj){
     ctx.beginPath();
     ctx.arc(obj.x,obj.y,enemy.diameter,0,Math.PI*2);
-    ctx.fillStyle = "#FF0000";
+    ctx.fillStyle = "#b934e3";
     if (obj.host){
-        ctx.fillStyle ="#00FF00"
+        ctx.fillStyle ="#b934e3"
     }
     ctx.fill();
     ctx.closePath() 
 }
+
+//host chases Player
 function hostChaseOsi(){
     for(let i = 0; i < enemies.length; i++){
         let currentEnemy = enemies[i];
-    
+        //Enemies are pulled to Host
         drawEnemy(currentEnemy);
         if(currentEnemy.host && currentEnemy.x > osi.x){
             host.x -= hostSpeed
@@ -72,7 +85,8 @@ function hostChaseOsi(){
     }
 }
 
-
+//enemies are pulled around host based on where they are in relation to the host 
+//plus a bit of randomness
 function swarm(){
     for(let i = 0; i < enemies.length; i++){
         let currentEnemy = enemies[i];
@@ -92,15 +106,18 @@ function swarm(){
         }
         if((currentEnemy.x + enemy.diameter/2  >= osi.x - osi.diameter/2 && currentEnemy.x - enemy.diameter/2 <= osi.x + osi.diameter/2 )
         && (currentEnemy.y + enemy.diameter/2 >= osi.y - osi.diameter/2 && currentEnemy.y - enemy.diameter/2 <= osi.y + osi.diameter/2)){
-            osi.health--
-            healthBar.style.width = `${osi.health/10}px` 
+            osi.health-- 
+            healthBar.style.width = `${osi.health}px` 
             
+            score++
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
         
         }
     }
 }
+
+//
 function deleteEnemy(currentEnemy){
     enemies.splice(enemies.indexOf(currentEnemy),1)
 
@@ -110,7 +127,7 @@ function deleteEnemy(currentEnemy){
         host = enemies[0]
     }
 }
-
+//moves Host to new enemy on Host Death
 function setHost(currentEnemy){
     if(currentEnemy.host){
         for(let i = 0; i < enemies.length; i++){
@@ -151,6 +168,8 @@ function setHost(currentEnemy){
         enemies.push(currentEnemy)
     }
 }())
+
+//moves main ship 
 function osiMove(){
     //up out 800
     if(osi.up && osi.y >= 20 ){
@@ -170,6 +189,8 @@ function osiMove(){
         osi.y += osi.move
     }
 }
+
+//the w,a,s,d keys are what contol your ship
 window.onkeydown = (event) => { 
     if(event.key.toLowerCase() == 'w' ){ 
         osi.up = true
@@ -198,7 +219,7 @@ window.onkeyup = (event) => {
     if(event.key.toLowerCase() == 's'){
         osi.down = false
     }
-    if(event.key.toLowerCase() == 'p'){
+    if(event.key.toLowerCase() == ' '){
         pause = !pause 
     }
 }
@@ -212,6 +233,7 @@ function draw(){
     hostChaseOsi();
     drawOsiris();
     swarm()
+    updateHUD()
 }
 setInterval(draw, 1)
 

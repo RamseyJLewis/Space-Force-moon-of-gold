@@ -17,12 +17,12 @@ TASK LIST
     .[✓]Align movement to 'a''w''d''s' key press
 .[]Make an enemy
     .[✓]make 3 enemys 
-    .[]break down functions into small more maluable pieces
-    .[]create an orbit of A.I around Host
-    .[]make the enemies attract to eachother like a hoard
-    .[]ensure enemies dont overlap
-    .[]make the enemies attarct to ship
-    .[]make enemy object scaleable 
+    .[✓]break down functions into small more maluable pieces
+    .[✓]create an orbit of A.I around Host
+    .[✓]make the enemies attract to eachother like a hoard
+    .[✓]ensure enemies dont overlap
+    .[✓]make the enemies attarct to ship
+    .[✓]make enemy object scaleable 
 .[]give ship projectiles
     .[]on click create projectiles
     .[]give direction to projectiles
