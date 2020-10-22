@@ -7,8 +7,10 @@ var HUD = document.getElementById('scoreBoard')
 var ctx = canvas.getContext('2d');
 window.addEventListener('click', bulletFire);
 
+
+///////////////////////////////// GLOBAL INFORMATION /////////////////////////////////////////////
 var enemies = [];
-var numOfEnemies = 200; 
+var numOfEnemies = 50; 
 var host;
 var swarmSpeed = 4;
 var swarmSize = 2;
@@ -20,9 +22,6 @@ var score = 0;
 var time = 310;
 var waveNum = 1;
 var bullets = []
-
-
-//grab vale after all deaths
 
 var osi = {
     x : canvas.width/2,
@@ -53,6 +52,7 @@ var  enemy = {
     diameter : 2.5,
 }
 
+///////////////////////////////// START TO DRAW ON SCREEN  /////////////////////////////////////////////
 
 //draws scoreboard
 function updateHUD(){
@@ -88,7 +88,7 @@ function drawEnemy(obj){
     ctx.fill();
     ctx.closePath() 
 }
-
+///////////////////////////////// FUNCTIONS OF HOW ITEMS ON SCREEN ACT /////////////////////////////////////////////
 //host chases Player
 function hostChaseOsi(){
     for(var i = 0; i < enemies.length; i++){
@@ -127,6 +127,7 @@ function swarm(){
             currentEnemy.x += currentEnemy.dx
             currentEnemy.y += currentEnemy.dy
         }
+        //if ship hits an enemy you destory enemy but take damage
         if(
             (currentEnemy.x + enemy.diameter/2  >= osi.x - osi.diameter/2 
             && currentEnemy.x - enemy.diameter/2 <= osi.x + osi.diameter/2)
@@ -140,19 +141,22 @@ function swarm(){
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
         }
+
+        //////////////////////////////////////////////////////////////// NEED TO FIX /////////////////////
+        
         //loop over all bullets and check curent enemy for impact
-        for(var i = 0; i < bullets.length; i++){
-            if(
-                (currentEnemy.x + enemy.diameter/2  >= bullet.x - bullet.diameter/2 
-                && currentEnemy.x - enemy.diameter/2 <= bullet.x + bullet.diameter/2)
-                && (currentEnemy.y + enemy.diameter/2 >= bullet.y - bullet.diameter/2 
-                && currentEnemy.y - enemy.diameter/2 <= bullet.y + bullet.diameter/2)
-            ){
-                score++
-                deleteEnemy(currentEnemy)
-                //invoke delete enemy 
-            }
-        }
+        // for(var i = 0; i < currentBullet.length; i++){
+        //     if(
+        //         (currentEnemy.x + enemy.diameter/2  === currentBullet.x - currentBullet.diameter/2 
+        //         && currentEnemy.x - enemy.diameter/2 === currentBullet.x + currentBullet.diameter/2)
+        //         && (currentEnemy.y + enemy.diameter/2 === currentBullet.y - currentBullet.diameter/2 
+        //         && currentEnemy.y - enemy.diameter/2 === currentBullet.y + currentBullet.diameter/2)
+        //     ){
+        //         score++
+        //         deleteEnemy(currentEnemy)
+        //         //invoke delete enemy 
+        //     }
+        // }
     }
 }
 
@@ -181,16 +185,14 @@ function setHost(currentEnemy){
     }
 }
 
-/////////////////////////////////////////       FIX   /////////// \////////////////////////
+
+//SWAN IN ENEMIES 
  function moreEnemies(){
-    if (enemies.length <= 10 || time % 60 == 0 ){
-        allEnemies = numOfEnemies * 1 * waveNum
+    if (enemies.length <= 10 || time % 200 == 0 ){
+        numOfEnemies * 1 * waveNum
         spawnWave()
     }
  }
-
-
- 
 function spawnWave(){ 
     var locationX = 240
     var locationY = 20 
@@ -201,7 +203,7 @@ function spawnWave(){
             locationX = (canvas.width /2) - 50
             locationY += 20
         } 
-        locationX += Math.random() * 20;
+        locationX += Math.random() * 10;
         var currentEnemy = {};
         currentEnemy.x = locationX;
         currentEnemy.y = locationY;
@@ -210,17 +212,17 @@ function spawnWave(){
         currentEnemy.dy = 0;
         currentEnemy.id = i;
         if(i== enemies/5){
-            
         // dictates Host
-            currentEnemy.host = true;
-            host = currentEnemy;
+        currentEnemy.host = true;
+        host = currentEnemy;
         }
         drawEnemy(currentEnemy);
         enemies.push(currentEnemy)
     }
 }
 
-//moves main ship 
+
+//MOVES PLAYER // MOVES SHIP
 function osiMove(){
     //up out 800
     if(osi.up && osi.y >= 20 ){
@@ -277,7 +279,7 @@ window.onkeyup = (event) => {
 }
 //Making bullets
 function bulletFire(){
-    console.log('shoot')    
+    //console.log('shoot')    
     var currentBullet = {...bullet};
     currentBullet.x = osi.x;
     currentBullet.y = osi.y;
