@@ -29,11 +29,11 @@ TASK LIST
     .[]make projectiles destory enemies on contact 
     .[]make projectiles destory self on contact with enemies or screen boundreis
 .[✓ ]create HUD
-    .[]create time frame to end game
-    .[]make time frame mesured by meters counting down
+    .[✓]create time frame to end game
+    .[✓]make time frame mesured by meters counting down
     .[]make spawning of enemies increase by distance decreasing 
-.[]create a score 
-    .[]disply on HUD
+.[✓]create a score 
+    .[✓]disply on HUD
 ////////////////////////////////////////////// MVP ///////////////////////////////////////////////////////////
 .[] Create aiming with mouse
     .[]capture mouse position

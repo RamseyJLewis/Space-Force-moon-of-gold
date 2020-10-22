@@ -16,8 +16,8 @@ var highestDeath = 0;
 var pause = false;
 var bulletList = [];
 var score = 0;
+var time = 300;
 //grab vale after all deaths
-
 
 var osi = {
     x : canvas.width/2,
@@ -40,11 +40,14 @@ var  enemy = {
     down : false,
     diameter : 2.5,
 }
+
+
 //draws scoreboard
 function updateHUD(){
-    HUD.innerText = 'Score: ' + score + ' H.P: ' + osi.health;
+    HUD.innerText = 'Score: ' + score + '\n' + ' H.P: ' + osi.health + '\n' + 'Time Left: ' + time +'s'; 
 
 }
+
 //draws player ship
 function drawOsiris(){ 
     ctx.beginPath();
@@ -111,16 +114,11 @@ function swarm(){
             score++
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
-            
-        
         }
     }
 }
 
-function gameover(){
-    if( osi.health == 0)
-    alert('GAME OVER')
-}
+
 
 //
 function deleteEnemy(currentEnemy){
@@ -144,7 +142,15 @@ function setHost(currentEnemy){
         }
     }
 }
+ function moreEnemies(){
+    if (enemies <= 10 || time == 250){
+        numOfEnemies * 100
+        drawEnemy()
+    }
+ }
 
+
+ 
 (function (){ 
     let locationX = 240
     let locationY = 20 
@@ -196,6 +202,7 @@ function osiMove(){
 }
 
 //the w,a,s,d keys are what contol your ship
+//IF USER IS IN UPPPERCASE MAKE THE INPUT LOWERCASE THIS IS A FAILSAFE 
 window.onkeydown = (event) => { 
     if(event.key.toLowerCase() == 'w' ){ 
         osi.up = true
@@ -229,10 +236,18 @@ window.onkeyup = (event) => {
     }
 }
 
+//if health reaches zero GAME OVER
+function gameover(){
+    if( osi.health <= 0 || time === 0)
+    alert('GAME OVER')
+}
+
+// RETURN FOR PAUSE FUNCTION ON SPACEBAR
 function draw(){
     if(pause){
         return
     }
+    //where every above function is running through
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     osiMove();
     hostChaseOsi();
@@ -240,7 +255,18 @@ function draw(){
     swarm()
     updateHUD()
     gameover();
+    moreEnemies();
 } 
+
+function countDown(){
+    // Decrement the time variable
+    time--
+}
+
+
+// 300 seconds in 5 minutes which is our run time 
+// 1 second = 1000 miliseconds setIntervals are run every milisecond
+setInterval(countDown, 1000);
 setInterval(draw, 1)
 
 
