@@ -31,7 +31,7 @@ TASK LIST
 .[✓ ]create HUD
     .[✓]create time frame to end game
     .[✓]make time frame mesured by meters counting down
-    .[]make spawning of enemies increase by distance decreasing 
+    .[✓]make spawning of enemies increase by distance decreasing 
 .[✓]create a score 
     .[✓]disply on HUD
 ////////////////////////////////////////////// MVP ///////////////////////////////////////////////////////////

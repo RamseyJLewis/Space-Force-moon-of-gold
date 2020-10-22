@@ -17,7 +17,6 @@ var swarmSize = 2;
 var hostSpeed = .5;
 var highestDeath = 0;
 var pause = false;
-var bulletList = [];
 var score = 0;
 var time = 310;
 var waveNum = 1;
@@ -38,10 +37,8 @@ var bullet = {
     x: osi.x,
     y: osi.y,
     diameter:2.5,
-    speed: .5,
-    color: 'gold', 
+    speed: .9, 
 }
-
 var  enemy = {
     x : canvas.width/2,
     y : 20,
@@ -59,10 +56,8 @@ function updateHUD(){
     HUD.innerText = 'Score: ' + score + '\n' + ' H.P: ' + osi.health + '\n' + 'Time Left:' + time + 's' + '\n' + 'Enemeis' + enemies.length ; 
 
 }
-
 //make bullet
 function drawBullet(currentBullet){
-    console.log(currentBullet)
     ctx.beginPath();
     ctx.arc(currentBullet.x,currentBullet.y,currentBullet.diameter,0,Math.PI*2);
     ctx.fillStyle = `#FFFFFF`;
@@ -107,7 +102,6 @@ function hostChaseOsi(){
         }
     }
 }
-
 //enemies are pulled around host based on where they are in relation to the host 
 //plus a bit of randomness
 function swarm(){
@@ -141,31 +135,25 @@ function swarm(){
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
         }
-
-        //////////////////////////////////////////////////////////////// NEED TO FIX /////////////////////
-        
-        //loop over all bullets and check curent enemy for impact
-        // for(var i = 0; i < currentBullet.length; i++){
-        //     if(
-        //         (currentEnemy.x + enemy.diameter/2  === currentBullet.x - currentBullet.diameter/2 
-        //         && currentEnemy.x - enemy.diameter/2 === currentBullet.x + currentBullet.diameter/2)
-        //         && (currentEnemy.y + enemy.diameter/2 === currentBullet.y - currentBullet.diameter/2 
-        //         && currentEnemy.y - enemy.diameter/2 === currentBullet.y + currentBullet.diameter/2)
-        //     ){
-        //         score++
-        //         deleteEnemy(currentEnemy)
-        //         //invoke delete enemy 
-        //     }
-        // }
     }
 }
-
-
-
-//
+function bulletContact(){
+    //loop over all bullets and check curent enemy for impact
+    for(var i = 0; i < bulletContact.length; i++){
+        if(
+            (currentEnemy.x + enemy.diameter/2  === bullets.x - bullets.diameter/2 
+            && currentEnemy.x - enemy.diameter/2 === bullets.x + bullets.diameter/2)
+            && (currentEnemy.y + enemy.diameter/2 === bullets.y - bullets.diameter/2 
+            && currentEnemy.y - enemy.diameter/2 === bullets.y + bullets.diameter/2)
+        ){
+            score++
+            deleteEnemy(currentEnemy)
+            //invoke delete enemy 
+        }
+    }
+}
 function deleteEnemy(currentEnemy){
     enemies.splice(enemies.indexOf(currentEnemy),1)
-
     if(currentEnemy.host){
         currentEnemy.host = false
         enemies[0].host = true
@@ -278,8 +266,7 @@ window.onkeyup = (event) => {
     }
 }
 //Making bullets
-function bulletFire(){
-    //console.log('shoot')    
+function bulletFire(){ 
     var currentBullet = {...bullet};
     currentBullet.x = osi.x;
     currentBullet.y = osi.y;
@@ -295,10 +282,6 @@ function drawAllBullets(){
 
     }
 }
-
-    
-
-
 
 //if health reaches zero GAME OVER
 function gameover(){
@@ -319,16 +302,15 @@ function draw(){
     drawOsiris();
     swarm()
     updateHUD()
-    gameover();
-    
+    gameover(); 
+    bulletContact();
 } 
 
 function countDown(){
-    // Decrement the time variable
+    // Decrement the time variable by 1
     time--
     moreEnemies();
 }
-
 
 // 300 seconds in 5 minutes which is our run time 
 // 1 second = 1000 miliseconds setIntervals are run every milisecond
