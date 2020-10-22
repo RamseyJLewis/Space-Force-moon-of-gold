@@ -137,6 +137,9 @@ function swarm(){
         }
     }
 }
+
+
+/////////////////////////////////////////////NEED TO FIX /////////
 function bulletContact(){
     //loop over all bullets and check curent enemy for impact
     for(var i = 0; i < bulletContact.length; i++){
