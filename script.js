@@ -5,18 +5,23 @@ var canvas = document.getElementById('myCanvas');
 var healthBar = document.getElementById('healthBlue')
 var HUD = document.getElementById('scoreBoard')
 var ctx = canvas.getContext('2d');
+window.addEventListener('click', bulletFire);
 
 var enemies = [];
 var numOfEnemies = 200; 
 var host;
-var swarmSpeed = 2;
+var swarmSpeed = 4;
 var swarmSize = 2;
-var hostSpeed = .3;
+var hostSpeed = .5;
 var highestDeath = 0;
 var pause = false;
 var bulletList = [];
 var score = 0;
-var time = 300;
+var time = 310;
+var waveNum = 1;
+var bullets = []
+
+
 //grab vale after all deaths
 
 var osi = {
@@ -29,8 +34,15 @@ var osi = {
     diameter : 20,
     health: 800,
     move: 1,
-    
 }
+var bullet = {
+    x: osi.x,
+    y: osi.y,
+    diameter:2.5,
+    speed: .5,
+    color: 'gold', 
+}
+
 var  enemy = {
     x : canvas.width/2,
     y : 20,
@@ -44,10 +56,19 @@ var  enemy = {
 
 //draws scoreboard
 function updateHUD(){
-    HUD.innerText = 'Score: ' + score + '\n' + ' H.P: ' + osi.health + '\n' + 'Time Left: ' + time +'s'; 
+    HUD.innerText = 'Score: ' + score + '\n' + ' H.P: ' + osi.health + '\n' + 'Time Left:' + time + 's' + '\n' + 'Enemeis' + enemies.length ; 
 
 }
 
+//make bullet
+function drawBullet(currentBullet){
+    console.log(currentBullet)
+    ctx.beginPath();
+    ctx.arc(currentBullet.x,currentBullet.y,currentBullet.diameter,0,Math.PI*2);
+    ctx.fillStyle = `#FFFFFF`;
+    ctx.fill();
+    ctx.closePath()  
+}
 //draws player ship
 function drawOsiris(){ 
     ctx.beginPath();
@@ -70,8 +91,8 @@ function drawEnemy(obj){
 
 //host chases Player
 function hostChaseOsi(){
-    for(let i = 0; i < enemies.length; i++){
-        let currentEnemy = enemies[i];
+    for(var i = 0; i < enemies.length; i++){
+        var currentEnemy = enemies[i];
         //Enemies are pulled to Host
         drawEnemy(currentEnemy);
         if(currentEnemy.host && currentEnemy.x > osi.x){
@@ -90,8 +111,8 @@ function hostChaseOsi(){
 //enemies are pulled around host based on where they are in relation to the host 
 //plus a bit of randomness
 function swarm(){
-    for(let i = 0; i < enemies.length; i++){
-        let currentEnemy = enemies[i];
+    for(var i = 0; i < enemies.length; i++){
+        var currentEnemy = enemies[i];
         drawEnemy(currentEnemy);
         if(!currentEnemy.host){
             if(host.x > currentEnemy.x && currentEnemy.dx < swarmSize){
@@ -106,14 +127,31 @@ function swarm(){
             currentEnemy.x += currentEnemy.dx
             currentEnemy.y += currentEnemy.dy
         }
-        if((currentEnemy.x + enemy.diameter/2  >= osi.x - osi.diameter/2 && currentEnemy.x - enemy.diameter/2 <= osi.x + osi.diameter/2 )
-        && (currentEnemy.y + enemy.diameter/2 >= osi.y - osi.diameter/2 && currentEnemy.y - enemy.diameter/2 <= osi.y + osi.diameter/2)){
+        if(
+            (currentEnemy.x + enemy.diameter/2  >= osi.x - osi.diameter/2 
+            && currentEnemy.x - enemy.diameter/2 <= osi.x + osi.diameter/2)
+            && (currentEnemy.y + enemy.diameter/2 >= osi.y - osi.diameter/2 
+            && currentEnemy.y - enemy.diameter/2 <= osi.y + osi.diameter/2)
+        ){
             osi.health-- 
             healthBar.style.width = `${osi.health}px` 
             
             score++
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
+        }
+        //loop over all bullets and check curent enemy for impact
+        for(var i = 0; i < bullets.length; i++){
+            if(
+                (currentEnemy.x + enemy.diameter/2  >= bullet.x - bullet.diameter/2 
+                && currentEnemy.x - enemy.diameter/2 <= bullet.x + bullet.diameter/2)
+                && (currentEnemy.y + enemy.diameter/2 >= bullet.y - bullet.diameter/2 
+                && currentEnemy.y - enemy.diameter/2 <= bullet.y + bullet.diameter/2)
+            ){
+                score++
+                deleteEnemy(currentEnemy)
+                //invoke delete enemy 
+            }
         }
     }
 }
@@ -133,7 +171,7 @@ function deleteEnemy(currentEnemy){
 //moves Host to new enemy on Host Death
 function setHost(currentEnemy){
     if(currentEnemy.host){
-        for(let i = 0; i < enemies.length; i++){
+        for(var i = 0; i < enemies.length; i++){
             if (enemies[i]){
                 enemies[i].host = true
                 host = enemies[i]
@@ -142,27 +180,29 @@ function setHost(currentEnemy){
         }
     }
 }
+
+/////////////////////////////////////////       FIX   /////////// \////////////////////////
  function moreEnemies(){
-    if (enemies <= 10 || time == 250){
-        numOfEnemies * 100
-        drawEnemy()
+    if (enemies.length <= 10 || time % 60 == 0 ){
+        allEnemies = numOfEnemies * 1 * waveNum
+        spawnWave()
     }
  }
 
 
  
-(function (){ 
-    let locationX = 240
-    let locationY = 20 
+function spawnWave(){ 
+    var locationX = 240
+    var locationY = 20 
     
-    for(let i = 0; i < numOfEnemies; i++){
+    for(var i = 0; i < numOfEnemies; i++){
         //Amount of enemies
         if(i% 10 === 0){
             locationX = (canvas.width /2) - 50
             locationY += 20
         } 
         locationX += Math.random() * 20;
-        let currentEnemy = {};
+        var currentEnemy = {};
         currentEnemy.x = locationX;
         currentEnemy.y = locationY;
         currentEnemy.host = false;
@@ -178,7 +218,7 @@ function setHost(currentEnemy){
         drawEnemy(currentEnemy);
         enemies.push(currentEnemy)
     }
-}())
+}
 
 //moves main ship 
 function osiMove(){
@@ -235,6 +275,28 @@ window.onkeyup = (event) => {
         pause = !pause 
     }
 }
+//Making bullets
+function bulletFire(){
+    console.log('shoot')    
+    var currentBullet = {...bullet};
+    currentBullet.x = osi.x;
+    currentBullet.y = osi.y;
+    bullets.push(currentBullet);
+}
+//drawing bullets on screeen and moving 
+function drawAllBullets(){
+   
+    for(let i = 0; i < bullets.length; i++){
+        var currentBullet = bullets[i];
+        currentBullet.y--;
+        drawBullet(currentBullet)
+
+    }
+}
+
+    
+
+
 
 //if health reaches zero GAME OVER
 function gameover(){
@@ -251,16 +313,18 @@ function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     osiMove();
     hostChaseOsi();
+    drawAllBullets();
     drawOsiris();
     swarm()
     updateHUD()
     gameover();
-    moreEnemies();
+    
 } 
 
 function countDown(){
     // Decrement the time variable
     time--
+    moreEnemies();
 }
 
 
