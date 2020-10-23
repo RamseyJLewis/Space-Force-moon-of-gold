@@ -3,7 +3,9 @@
 //W = WIDTH && H = HEIGHT && POS = POSITION
 document.getElementById('startGame').addEventListener('click',function startGame(){
 
-
+var parent = document.getElementById('Parent')
+var child = document.getElementById('startGame')
+parent.removeChild(child)
 
 
 
@@ -63,7 +65,7 @@ var  enemy = {
 
 //draws scoreboard
 function updateHUD(){
-    HUD.innerText = 'Score: ' + score + '\n' + ' H.P: ' + osi.health + '\n' + 'Time Left:' + time + 's' + '\n' + 'Enemeis' + enemies.length ; 
+    HUD.innerText = 'Score: ' + score + '\n' + ' H.P: ' + osi.health +  '\n' + 'Enemeis: ' + enemies.length + '\n' + 'Time Left: ' + time + 's' ; 
 
 }
 //make bullet
