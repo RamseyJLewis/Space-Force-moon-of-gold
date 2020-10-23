@@ -7,7 +7,16 @@ html, body{
     background-color: black ;
 
 }
+ #startGame{
+   background-color: black;
+   background-size: cover;
+   position: absolute;
+   left: 200px;
+   top: 0;
+   border-radius: 25px;
+   z-index: -1;
 
+ }
 #myCanvas{
     background-image: url(./assets/redPlanet.jpeg);
     background-color: black;
@@ -58,6 +67,8 @@ html, body{
     text-decoration-color: black;
     text-decoration: black;
 }
+
+
 
 
   

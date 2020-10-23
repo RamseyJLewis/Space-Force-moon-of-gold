@@ -1,6 +1,13 @@
+////////////////////////////////////// GAME TITLE ////////////////////////
 //OSI = OSIRIS THE SHIP
 //W = WIDTH && H = HEIGHT && POS = POSITION
+document.getElementById('startGame').addEventListener('click',function startGame(){
 
+
+
+
+
+////////////////////////////////////////////////////// GAME START ////////////////////////
 var canvas = document.getElementById('myCanvas');
 var healthBar = document.getElementById('healthBlue')
 var HUD = document.getElementById('scoreBoard')
@@ -10,7 +17,7 @@ window.addEventListener('click', bulletFire);
 
 ///////////////////////////////// GLOBAL INFORMATION /////////////////////////////////////////////
 var enemies = [];
-var numOfEnemies = 50; 
+var numOfEnemies = 60; 
 var host;
 var swarmSpeed = 4;
 var swarmSize = 2;
@@ -48,6 +55,9 @@ var  enemy = {
     down : false,
     diameter : 2.5,
 }
+
+    /// if there is a click run below 
+
 
 ///////////////////////////////// START TO DRAW ON SCREEN  /////////////////////////////////////////////
 
@@ -291,7 +301,6 @@ function gameover(){
     if( osi.health <= 0 || time === 0)
     alert('GAME OVER')
 }
-
 // RETURN FOR PAUSE FUNCTION ON SPACEBAR
 function draw(){
     if(pause){
@@ -319,5 +328,5 @@ function countDown(){
 // 1 second = 1000 miliseconds setIntervals are run every milisecond
 setInterval(countDown, 1000);
 setInterval(draw, 1)
-
-
+})
+startGame();
