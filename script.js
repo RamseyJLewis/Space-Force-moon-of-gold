@@ -3,6 +3,8 @@
 //W = WIDTH && H = HEIGHT && POS = POSITION
 document.getElementById('startGame').addEventListener('click',function startGame(){
 
+
+//Removes image after click 
 var parent = document.getElementById('Parent')
 var child = document.getElementById('startGame')
 parent.removeChild(child)
@@ -11,7 +13,7 @@ parent.removeChild(child)
 
 ////////////////////////////////////////////////////// GAME START ////////////////////////
 var canvas = document.getElementById('myCanvas');
-var healthBar = document.getElementById('healthBlue')
+var healthBar = document.getElementById('healthGreen')
 var HUD = document.getElementById('scoreBoard')
 var ctx = canvas.getContext('2d');
 window.addEventListener('click', bulletFire);
@@ -19,11 +21,12 @@ window.addEventListener('click', bulletFire);
 
 ///////////////////////////////// GLOBAL INFORMATION /////////////////////////////////////////////
 var enemies = [];
+var allEnemies = [];
 var numOfEnemies = 60; 
 var host;
-var swarmSpeed = 4;
-var swarmSize = 2;
-var hostSpeed = .5;
+var swarmSpeed = .5;
+var swarmSize = 1;
+var hostSpeed = .2;
 var highestDeath = 0;
 var pause = false;
 var score = 0;
@@ -45,8 +48,8 @@ var osi = {
 var bullet = {
     x: osi.x,
     y: osi.y,
-    diameter:2.5,
-    speed: .9, 
+    diameter: 10,
+    speed: 2, 
 }
 var  enemy = {
     x : canvas.width/2,
@@ -90,7 +93,7 @@ function drawEnemy(obj){
     ctx.arc(obj.x,obj.y,enemy.diameter,0,Math.PI*2);
     ctx.fillStyle = "#b934e3";
     if (obj.host){
-        ctx.fillStyle ="#b934e3"
+        ctx.fillStyle ="red"
     }
     ctx.fill();
     ctx.closePath() 
@@ -140,10 +143,10 @@ function swarm(){
             && (currentEnemy.y + enemy.diameter/2 >= osi.y - osi.diameter/2 
             && currentEnemy.y - enemy.diameter/2 <= osi.y + osi.diameter/2)
         ){
-            osi.health-- 
+            osi.health -= 1.5
             healthBar.style.width = `${osi.health}px` 
             
-            score++
+            //score++
             deleteEnemy(currentEnemy)
             //invoke delete enemy 
         }
@@ -154,19 +157,28 @@ function swarm(){
 /////////////////////////////////////////////NEED TO FIX /////////
 function bulletContact(){
     //loop over all bullets and check curent enemy for impact
-    for(var i = 0; i < bulletContact.length; i++){
+    for(var i = 0; i < 1000000000; i++){
+        var currentEnemy = allEnemies[i] 
+        var bullet = bullets[i]
+       
         if(
-            (currentEnemy.x + enemy.diameter/2  === bullets.x - bullets.diameter/2 
-            && currentEnemy.x - enemy.diameter/2 === bullets.x + bullets.diameter/2)
-            && (currentEnemy.y + enemy.diameter/2 === bullets.y - bullets.diameter/2 
-            && currentEnemy.y - enemy.diameter/2 === bullets.y + bullets.diameter/2)
+            (currentEnemy.x + enemy.diameter/2  >= bullet.x - bullet.diameter/2 
+            && currentEnemy.x - enemy.diameter/2 <= bullet.x + bullet.diameter/2)
+            && (currentEnemy.y + enemy.diameter/2 >= bullet.y - bullet.diameter/2 
+            && currentEnemy.y - enemy.diameter/2 <= bullet.y + bullet.diameter/2)
         ){
-            score++
+            if(currentEnemy.host){
+                deleteEnemy(currentEnemy.host)
+            }
             deleteEnemy(currentEnemy)
+            score++
             //invoke delete enemy 
         }
     }
 }
+
+
+//moves Host to new enemy on Host Death
 function deleteEnemy(currentEnemy){
     enemies.splice(enemies.indexOf(currentEnemy),1)
     if(currentEnemy.host){
@@ -175,21 +187,20 @@ function deleteEnemy(currentEnemy){
         host = enemies[0]
     }
 }
-//moves Host to new enemy on Host Death
-function setHost(currentEnemy){
-    if(currentEnemy.host){
-        for(var i = 0; i < enemies.length; i++){
-            if (enemies[i]){
-                enemies[i].host = true
-                host = enemies[i]
-                return
-            }
-        }
-    }
-}
 
+// function setHost(currentEnemy){
+//     if(currentEnemy.host){
+//         for(var i = 0; i < enemies.length; i++){
+//             if (enemies[i]){
+//                 enemies[i].host = true
+//                 host = enemies[i]
+//                 return
+//             }
+//         }
+//     }
+// }
 
-//SWAN IN ENEMIES 
+//SPWAN IN ENEMIES 
  function moreEnemies(){
     if (enemies.length <= 10 || time % 200 == 0 ){
         numOfEnemies * 1 * waveNum
@@ -221,6 +232,7 @@ function spawnWave(){
         }
         drawEnemy(currentEnemy);
         enemies.push(currentEnemy)
+        allEnemies.push(currentEnemy, numOfEnemies)
     }
 }
 
@@ -292,7 +304,7 @@ function drawAllBullets(){
    
     for(let i = 0; i < bullets.length; i++){
         var currentBullet = bullets[i];
-        currentBullet.y--;
+        currentBullet.y -= bullet.speed;
         drawBullet(currentBullet)
 
     }
@@ -301,7 +313,7 @@ function drawAllBullets(){
 //if health reaches zero GAME OVER
 function gameover(){
     if( osi.health <= 0 || time === 0)
-    alert('GAME OVER')
+    alert('YOUR SHIP WAS DESTROYED')
 }
 // RETURN FOR PAUSE FUNCTION ON SPACEBAR
 function draw(){

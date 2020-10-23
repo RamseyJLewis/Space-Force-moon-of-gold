@@ -1,3 +1,6 @@
+/* Z index pulls or pushes back css inputs */
+
+
 html, body{
     padding: 0; 
     margin: 0;
@@ -5,18 +8,7 @@ html, body{
     display: flex;
     background-color: black ;
 }
- 
-#startGame{
-   background-color: black;
-   background-size: cover;
-   position: absolute;
-   left: 200px;
-   top: 0;
-   border-radius: 25px;
-   z-index: -1;
- }
-
- #myCanvas{
+  #myCanvas{
     background-image: url(./assets/redPlanet.jpeg);
     background-color: black;
     background-size: cover;
@@ -26,9 +18,17 @@ html, body{
     border-radius: 25px;
     z-index: -1;
   }
+#startGame{
+   background-color: black;
+   background-size: cover;
+   position: absolute;
+   left: 200px;
+   top: 0;
+   border-radius: 25px;
+   z-index: 4;
+ }
 
-
-  #healthBlue{
+  #healthGreen{
     position: absolute;
     left: 225px;
     top: 10px;
@@ -36,7 +36,7 @@ html, body{
     width:800px;
     background-color: #00c16e;
     border-radius: 25px;
-    z-index: 3;
+    z-index: 2;
   }
   
   #healthRed{
