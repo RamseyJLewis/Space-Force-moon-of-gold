@@ -22,7 +22,7 @@ window.addEventListener('click', bulletFire);
 ///////////////////////////////// GLOBAL INFORMATION /////////////////////////////////////////////
 var enemies = [];
 var allEnemies = [];
-var numOfEnemies = 60; 
+var numOfEnemies = 61; 
 var host;
 var swarmSpeed = .5;
 var swarmSize = 1;
@@ -152,7 +152,6 @@ function swarm(){
         }
     }
 }
-
 
 /////////////////////////////////////////////NEED TO FIX /////////
 function bulletContact(){
@@ -339,7 +338,7 @@ function countDown(){
 }
 
 // 300 seconds in 5 minutes which is our run time 
-// 1 second = 1000 miliseconds setIntervals are run every milisecond
+// 1 second = 1000 miliseconds setIntervals are run every miliseconds
 setInterval(countDown, 1000);
 setInterval(draw, 1)
 })
