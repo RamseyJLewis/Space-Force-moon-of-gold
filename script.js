@@ -28,11 +28,11 @@ document.getElementById('startGame').addEventListener('click',function startGame
     ///////////////////////////////// GLOBAL INFORMATION /////////////////////////////////////////////
     var enemies = [];
     var allEnemies = [];
-    var numOfEnemies = 100; 
+    var numOfEnemies = 150; 
     var host;
-    var swarmSpeed = 4;
-    var swarmSize = 2;
-    var hostSpeed = .6;
+    var swarmSpeed = 8;
+    var swarmSize = 2.5;
+    var hostSpeed = 1.3;
     var pause = false;
     var score = 0;
     var time = 120;
@@ -49,13 +49,13 @@ document.getElementById('startGame').addEventListener('click',function startGame
         down : false,
         diameter : 20,
         health: 800,
-        move: 1,
+        move: 2,
     }
     var bullet = {
         x: osi.x,
         y: osi.y,
-        diameter: 4,
-        speed: 2,
+        diameter: 5,
+        speed: 1.5,
         difference: null,
         slope: null,
         dest: null,
@@ -68,7 +68,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
         left : false,
         right : false,
         down : false,
-        diameter : 2.5,
+        diameter : 3,
     }
     
     // ->
@@ -88,7 +88,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
     function drawBullet(currentBullet){
         ctx.beginPath();
         ctx.arc(currentBullet.x,currentBullet.y,currentBullet.diameter,0,Math.PI*2);
-        ctx.fillStyle = `#FFFFFF`;
+        ctx.fillStyle = `#edf2f4`;
         ctx.fill();
         ctx.closePath();
     }
@@ -96,7 +96,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
     function drawOsiris(){ 
         ctx.beginPath();
         ctx.arc(osi.x,osi.y,osi.diameter,0,Math.PI*2);
-        ctx.fillStyle = "#5bc0be";
+        ctx.fillStyle = "#708d81";
         ctx.fill();
         ctx.closePath()  
     }
@@ -106,7 +106,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
         ctx.arc(obj.x,obj.y,enemy.diameter,0,Math.PI*2);
         ctx.fillStyle = "#b934e3";
         if (obj.host){
-            ctx.fillStyle ="red"
+            ctx.fillStyle ="#b934e3"
         }
         ctx.fill();
         ctx.closePath() 
@@ -166,7 +166,6 @@ document.getElementById('startGame').addEventListener('click',function startGame
         }
     }
     
-    
     function bulletContact(){
         //loop over all bullets and check curent enemy for impact
         if(bullets.length > 0){
@@ -224,7 +223,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
     
     //SPWAN IN ENEMIES 
      function moreEnemies(){
-        if (enemies.length <= 10 || time % 200 == 0 ){
+        if (enemies.length <= 20 || time % 200 == 0 ){
             numOfEnemies * 1 * waveNum
             spawnWave()
         }
@@ -328,7 +327,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
         // curBullet.counter = [...curBullet.difference];
         bullets.push(curBullet);
     }
-    /// STACK OVERFLOW ----------- slightly modified
+  
     function getCursorPosition(canvas, e) {
         var rect = canvas.getBoundingClientRect();
         var x = e.clientX - rect.left;
@@ -336,17 +335,11 @@ document.getElementById('startGame').addEventListener('click',function startGame
         // console.log("x: " + x + " y: " + y)
         return [x, y];
     }
-    /// --------------------------------------------
-    
+
     function moveBullet(curBullet){
         // If y is less than 0 we are going down - we need to add to y till reaching destination
         // If x is less than 0 we are going right - we need to add to x till reacing destination
-    
         // I NEED TO CALCULATE THE SLOPE!
-        // change in y divided by change in x;
-        // console.log(curBullet, "here")
-    
-        // how do I keep the Y value from being only the speed and the x value from being relative to that
         if(curBullet.difference[0] < 0){
             curBullet.x += curBullet.speed;
             curBullet.y += (curBullet.speed * curBullet.slope);
@@ -356,13 +349,6 @@ document.getElementById('startGame').addEventListener('click',function startGame
             curBullet.y -= (curBullet.speed * curBullet.slope);
         }
     
-        // if(curBullet.difference[1] < 0 && !(curBullet.counter[1] === curBullet.dest[1])){
-        //     curBullet.counter[1] += curBullet.speed;
-        //     curBullet.y += curBullet.speed;
-        // } else if (curBullet.difference[1] > 0 && !(curBullet.counter[1] === curBullet.dest[1])) {
-        //     curBullet.counter[1] -= curBullet.speed;
-        //     curBullet.y -= curBullet.speed;
-        // }
     }
     //drawing bullets on screeen and moving 
     function drawAllBullets(){
@@ -388,8 +374,14 @@ document.getElementById('startGame').addEventListener('click',function startGame
     
     //if health reaches zero GAME OVER
     function gameover(){
-        if( osi.health <= 0 || time === 0)
+        if( osi.health <= 0)
         alert('YOUR SHIP WAS DESTROYED')
+        
+    }
+
+    function gamewon(){
+        if( time === 0)
+        alert('YOU SURVIVED, HELP HAS ARRIVED')
     }
     // RETURN FOR PAUSE FUNCTION ON SPACEBAR
     function draw(){
@@ -405,6 +397,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
         swarm()
         updateHUD()
         gameover(); 
+        gamewon()
     
         // UNCOMMENT CODE TO PAUSE WHEN THERE IS A COLLISION 
         var contact = bulletContact();
@@ -427,4 +420,3 @@ document.getElementById('startGame').addEventListener('click',function startGame
     setInterval(countDown, 1000);
     setInterval(draw, 1)
     })
-    // startGame();
