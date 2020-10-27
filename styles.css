@@ -8,6 +8,7 @@ html, body{
     display: flex;
     background-color: black ;
 }
+
   #myCanvas{
     background-image: url(./assets/redPlanet.jpeg);
     background-color: black;
@@ -17,6 +18,7 @@ html, body{
     top: 0;
     border-radius: 25px;
     z-index: -1;
+    cursor: crosshair;
   }
 #startGame{
    background-color: black;

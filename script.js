@@ -15,10 +15,10 @@ document.getElementById('startGame').addEventListener('click',function startGame
     var canvas = document.getElementById('myCanvas');
     var healthBar = document.getElementById('healthGreen')
     var HUD = document.getElementById('scoreBoard')
+    var osiSprite = new Image() 
+    osiSprite.src = './assets/OSI.png'
     var ctx = canvas.getContext('2d');
     window.addEventListener('click', (e) => {
-        // console.log(e, "event")
-        // console.log(osi.x, osi.y, "x y osi")
         bulletFire(getCursorPosition(canvas, e));
     });
     
@@ -28,11 +28,11 @@ document.getElementById('startGame').addEventListener('click',function startGame
     ///////////////////////////////// GLOBAL INFORMATION /////////////////////////////////////////////
     var enemies = [];
     var allEnemies = [];
-    var numOfEnemies = 150; 
+    var numOfEnemies = 120; 
     var host;
-    var swarmSpeed = 8;
-    var swarmSize = 2.5;
-    var hostSpeed = 1.3;
+    var swarmSpeed = 4.2;
+    var swarmSize = 2;
+    var hostSpeed = .6;
     var pause = false;
     var score = 0;
     var time = 120;
@@ -47,14 +47,14 @@ document.getElementById('startGame').addEventListener('click',function startGame
         left : false,
         right : false,
         down : false,
-        diameter : 20,
+        diameter : 30,
         health: 800,
-        move: 2,
+        move: 1,
     }
     var bullet = {
         x: osi.x,
         y: osi.y,
-        diameter: 5,
+        diameter: 2.5,
         speed: 1.5,
         difference: null,
         slope: null,
@@ -71,12 +71,8 @@ document.getElementById('startGame').addEventListener('click',function startGame
         diameter : 3,
     }
     
-    // ->
-    // Difference 
-    
+  
     /// if there is a click run below 
-    
-    
     ///////////////////////////////// START TO DRAW ON SCREEN  /////////////////////////////////////////////
     
     //draws scoreboard
@@ -88,25 +84,21 @@ document.getElementById('startGame').addEventListener('click',function startGame
     function drawBullet(currentBullet){
         ctx.beginPath();
         ctx.arc(currentBullet.x,currentBullet.y,currentBullet.diameter,0,Math.PI*2);
-        ctx.fillStyle = `#edf2f4`;
+        ctx.fillStyle = `#6fffe9`;
         ctx.fill();
         ctx.closePath();
     }
     //draws player ship
     function drawOsiris(){ 
-        ctx.beginPath();
-        ctx.arc(osi.x,osi.y,osi.diameter,0,Math.PI*2);
-        ctx.fillStyle = "#708d81";
-        ctx.fill();
-        ctx.closePath()  
+        ctx.drawImage(osiSprite,osi.x - osi.diameter,osi.y - osi.diameter,osi.diameter * 2,osi.diameter * 2);
     }
     //draws enemy & host 
     function drawEnemy(obj){
         ctx.beginPath();
         ctx.arc(obj.x,obj.y,enemy.diameter,0,Math.PI*2);
-        ctx.fillStyle = "#b934e3";
+        ctx.fillStyle = "#000000";
         if (obj.host){
-            ctx.fillStyle ="#b934e3"
+            ctx.fillStyle ="#000000"
         }
         ctx.fill();
         ctx.closePath() 
@@ -223,7 +215,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
     
     //SPWAN IN ENEMIES 
      function moreEnemies(){
-        if (enemies.length <= 20 || time % 200 == 0 ){
+        if (enemies.length <= 40 || time % 200 == 0 ){
             numOfEnemies * 1 * waveNum
             spawnWave()
         }
@@ -375,13 +367,12 @@ document.getElementById('startGame').addEventListener('click',function startGame
     //if health reaches zero GAME OVER
     function gameover(){
         if( osi.health <= 0)
-        alert('YOUR SHIP WAS DESTROYED')
-        
+        alert('YOUR SHIP WAS DESTROYED -- ENEMIES DESROYED: '+ score)
     }
 
     function gamewon(){
         if( time === 0)
-        alert('YOU SURVIVED, HELP HAS ARRIVED')
+        alert('YOU SURVIVED, HELP HAS ARRIVED -- ENEMIES DESROYED: '+ score)
     }
     // RETURN FOR PAUSE FUNCTION ON SPACEBAR
     function draw(){
