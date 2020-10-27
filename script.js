@@ -11,7 +11,7 @@ document.getElementById('startGame').addEventListener('click',function startGame
     
     
     
-    ////////////////////////////////////////////////////// GAME START ////////////////////////
+    ////////////////////////////////////////////////////// GAME START //////////////////////////
     var canvas = document.getElementById('myCanvas');
     var healthBar = document.getElementById('healthGreen')
     var HUD = document.getElementById('scoreBoard')
